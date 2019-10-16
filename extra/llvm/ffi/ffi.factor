@@ -4,11 +4,20 @@ USING: alien alien.c-types alien.libraries alien.syntax combinators
 kernel ldcache system ;
 IN: llvm.ffi
 
-<< "llvm" {
-    { [ os linux? ] [ "LLVM-3.9" find-so [ cdecl add-library ] [ drop ] if* ] }
-    [ drop ]
-} cond
+! << "llvm" {
+!     { [ os linux? ] [ "LLVM-3.9" find-so [ cdecl add-library ] [ drop ] if* ] }
+!     [ drop ]
+! } cond
+! >>
+
+<<
+"llvm" {
+    { [ os windows? ] [ "libLLVM.dll" ] }
+    { [ os macosx? ] [ "libLLVM.dylib" ] }
+    { [ os unix? ] [ "libLLVM-3.9.so" ] }
+} cond cdecl add-library
 >>
+
 
 LIBRARY: llvm
 
